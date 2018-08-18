@@ -1,0 +1,94 @@
+function index_map = generateIndexMap(gray_stack, w_size)
+
+% Write a program called generate index map - this one
+% that generates an index map from a focal stack
+% index map = image, every pixel corresponds to a scene point
+
+sz = size(gray_stack);
+
+if mod(sz(3), 3) ~= 0
+    figure(1);
+    index_map = uint8(ones(sz(1:2)));
+    close(1); 
+
+    focus = double(ones(sz));
+    
+
+    % The integer intensity of every pixel indicates the index 
+    % of the best focussed layer associated with the scene point
+    % Index map generation can be carried out in two steps
+    % First step is to compute a focus measure for every pixel in every image
+    % of the focal stack
+
+    for l = 1:1:sz(3)
+        %for i = 1:1: sz(1)
+        %   for j = 1:1:sz(2)
+            focus(:,:,l) = abs(del2(double(gray_stack(:,:,l))));
+        %    end
+        %end
+    end
+
+    %focus(1:10,1,1)'
+    %focus(1:10,1,2)'
+
+
+    for i = 1:1:sz(1)
+        for j = 1:1:sz(2)
+            [c,in] = max(focus(i,j,:));
+            index_map(i,j) = in;
+            %break;   
+        end
+        %break;
+    end
+
+    %index_map(1,1)
+    %focus(1,1,:)
+
+else
+    figure(1);
+    index_map = uint8(ones(sz(1:2)));
+    close(1); 
+
+    focus = double(ones(sz));
+    
+
+    % The integer intensity of every pixel indicates the index 
+    % of the best focussed layer associated with the scene point
+    % Index map generation can be carried out in two steps
+    % First step is to compute a focus measure for every pixel in every image
+    % of the focal stack
+
+    % 1-> 1,2,3
+    % 2-> 4,5,6
+    % 3-> 7,8,9
+
+    
+    for l = 1:1:(sz(3)/3)
+        %for i = 1:1: sz(1)
+        %   for j = 1:1:sz(2)
+            focus(:,:,3*l-3:3*l) = abs(del2(double(gray_stack(:,:,3*l-3:3*l))));
+        %    end
+        %end
+    end
+
+    %focus(1:10,1,1)'
+    %focus(1:10,1,2)'
+
+
+    for i = 1:1:sz(1)
+        for j = 1:1:sz(2)
+            fv = [];
+            for l = 1:1:(sz(3)/3)
+                fv(l) = norm(focus(i,j,3*l-3:3*l));
+                %break;   
+            end
+            [c,in] = max(fv);
+            index_map(i,j) = in;
+        end
+        %break;
+    end
+
+    %index_map(1,1)
+    %focus(1,1,:)
+
+end

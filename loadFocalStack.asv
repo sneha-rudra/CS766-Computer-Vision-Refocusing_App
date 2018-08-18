@@ -1,0 +1,44 @@
+function [rgb_stack, gray_stack] = loadFocalStack(focal_stack_dir)
+
+% rgb_stack is an mxnx3k matrix, where m and n are the height and width of
+% the image, respectively, and 3k is the number of images in a focal stack
+% multiplied by 3 (each image contains RGB channels). 
+%
+% rgb_stack will only be used for the refocusing app viewer (it is not used
+% here).
+%
+% gray_stack is an mxnxk matrix.
+
+cd(focal_stack_dir);
+listing = dir;
+
+
+k = length(listing)-3;
+
+i = imread(listing(4).name);
+sz =size(i);
+m = sz(1);
+n = sz(2);
+
+gray_stack = uint8(zeros(m,n,k));
+rgb_stack = uint8(zeros(m,n,3*k));
+
+for in = 4:1:k+3
+    %listing(in).name
+    i = imread(listing(in).name);
+    rgb_stac
+    %figure; imshow(i)
+    g = rgb2gray(i);
+    gray_stack(:,:,in-3) = g;
+    %figure; imshow(gray_stack(:,:,in-3))
+end
+
+
+%imshow(gray_stack(:,:,1))
+%figure; imshow(gray_stack(:,:,23))
+%for i = 4:1:k
+%end
+
+cd('..')
+
+
